@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, ChangeEvent } from "react";
 
 function Player({ initialName, symbol, isActive, onNameChange }: { initialName: string, symbol: string, isActive?: boolean, onNameChange: (player: string, newName: string) => void }) {
     const [isEditing, setIsEditing] = useState(false);
@@ -13,7 +13,7 @@ function Player({ initialName, symbol, isActive, onNameChange }: { initialName: 
             onNameChange(symbol, playerName);
         }
     }
-    function handleChange(event: any) {
+    function handleChange(event: ChangeEvent<HTMLInputElement>) {
         setPlayerName(event.target.value as string);
     }
 
