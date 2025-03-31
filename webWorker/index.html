@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Top 10 Data Structure Visualizations</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      text-align: center;
+    }
+    #dsSelect {
+      font-size: 16px;
+      padding: 5px;
+      margin-bottom: 20px;
+    }
+    canvas {
+      border: 1px solid #ccc;
+      background: #fafafa;
+    }
+  </style>
+</head>
+<body>
+  <h1>Data Structure Visualizations</h1>
+  <p>Select a problem to visualize:</p>
+  <select id="dsSelect">
+    <option value="reverseLinkedList">1. Reverse Linked List</option>
+    <option value="detectCycleLinkedList">2. Detect Cycle in Linked List</option>
+    <option value="bstConstruction">3. BST Construction</option>
+    <option value="inorderTraversal">4. Inorder Traversal (BST)</option>
+    <option value="stackOperations">5. Stack Operations</option>
+    <option value="queueOperations">6. Queue Operations</option>
+    <option value="minHeap">7. Min-Heap Construction</option>
+    <option value="graphBFS">8. Graph BFS</option>
+    <option value="trieInsertion">9. Trie Insertion/Search</option>
+    <option value="hashTable">10. Hash Table Insertion</option>
+  </select>
+  <br>
+  <canvas id="canvas" width="900" height="600"></canvas>
+
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const select = document.getElementById('dsSelect');
+
+    // Clear canvas helper
+    function clearCanvas() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    // *******************************
+    // 1. Reverse a Linked List
+    // *******************************
+    function visualizeReverseLinkedList() {
+      clearCanvas();
+      // We draw nodes as circles in a horizontal line
+      const nodes = [10, 20, 30, 40, 50];
+      const startX = 100, y = 100, gap = 100;
+      // Draw initial linked list with arrows
+      nodes.forEach((val, i) => {
+        const x = startX + i * gap;
+        drawCircle(x, y, 20, val);
+        if (i < nodes.length - 1) {
+          drawArrow(x + 20, y, x + gap - 20, y);
+        }
+      });
+      // After a delay, animate reversal (redraw in reverse order)
+      setTimeout(() => {
+        clearCanvas();
+        nodes.slice().reverse().forEach((val, i) => {
+          const x = startX + i * gap;
+          drawCircle(x, y, 20, val);
+          if (i < nodes.length - 1) {
+            drawArrow(x + 20, y, x + gap - 20, y);
+          }
+        });
+      }, 2000);
+    }
+
+    // *******************************
+    // 2. Detect Cycle in Linked List
+    // *******************************
+    function visualizeDetectCycleLinkedList() {
+      clearCanvas();
+      // Draw a linked list with 6 nodes where the last node points to node 3.
+      const nodes = [1, 2, 3, 4, 5, 6];
+      const startX = 80, y = 100, gap = 80;
+      // Draw nodes
+      nodes.forEach((val, i) => {
+        const x = startX + i * gap;
+        drawCircle(x, y, 20, val);
+        if (i < nodes.length - 1) {
+          drawArrow(x + 20, y, x + gap - 20, y);
+        }
+      });
+      // Draw cycle arrow from node6 back to node3
+      const fromX = startX + (nodes.length - 1) * gap;
+      const fromY = y;
+      const toX = startX + 2 * gap;
+      const toY = y;
+      // Draw a curved arrow for cycle
+      drawCurvedArrow(fromX, fromY, toX, toY);
+      // Indicate cycle detected (after a delay)
+      setTimeout(() => {
+        ctx.fillStyle = 'red';
+        ctx.font = '20px Arial';
+        ctx.fillText("Cycle Detected!", canvas.width/2 - 60, y + 80);
+      }, 2000);
+    }
+
+    // *******************************
+    // 3. BST Construction
+    // *******************************
+    function visualizeBSTConstruction() {
+      clearCanvas();
+      // We'll build a BST from an array.
+      const values = [50, 30, 70, 20, 40, 60, 80];
+      const bst = buildBST(values);
+      assignBSTCoordinates(bst.root, 0, 0, canvas.width);
+      drawBST(bst.root);
+    }
+
+    // BST Classes and helpers (reuse from previous BST example)
+    class TreeNode {
+      constructor(value) {
+        this.value = value;
+        this.left = null;
+        this.right = null;
+        this.x = 0;
+        this.y = 0;
+      }
+    }
+    class BinarySearchTree {
+      constructor() {
+        this.root = null;
+      }
+      insert(value) {
+        const newNode = new TreeNode(value);
+        if (this.root === null) {
+          this.root = newNode;
+          return;
+        }
+        let current = this.root;
+        while (true) {
+          if (value < current.value) {
+            if (!current.left) {
+              current.left = newNode;
+              break;
+            }
+            current = current.left;
+          } else {
+            if (!current.right) {
+              current.right = newNode;
+              break;
+            }
+            current = current.right;
+          }
+        }
+      }
+    }
+    function buildBST(values) {
+      const bst = new BinarySearchTree();
+      values.forEach(v => bst.insert(v));
+      return bst;
+    }
+    function assignBSTCoordinates(node, depth, xMin, xMax) {
+      if (!node) return;
+      node.x = (xMin + xMax) / 2;
+      node.y = depth * 80 + 40;
+      assignBSTCoordinates(node.left, depth + 1, xMin, node.x);
+      assignBSTCoordinates(node.right, depth + 1, node.x, xMax);
+    }
+    function drawBST(node) {
+      if (!node) return;
+      ctx.strokeStyle = '#000';
+      ctx.lineWidth = 2;
+      if (node.left) {
+        ctx.beginPath();
+        ctx.moveTo(node.x, node.y);
+        ctx.lineTo(node.left.x, node.left.y);
+        ctx.stroke();
+        drawBST(node.left);
+      }
+      if (node.right) {
+        ctx.beginPath();
+        ctx.moveTo(node.x, node.y);
+        ctx.lineTo(node.right.x, node.right.y);
+        ctx.stroke();
+        drawBST(node.right);
+      }
+      drawCircle(node.x, node.y, 20, node.value);
+    }
+
+    // *******************************
+    // 4. Inorder Traversal (BST)
+    // *******************************
+    function visualizeInorderTraversal() {
+      visualizeBSTConstruction();
+      // After BST is drawn, highlight nodes in inorder sequence.
+      // For simplicity, we rebuild the BST and compute inorder array.
+      const values = [50, 30, 70, 20, 40, 60, 80];
+      const bst = buildBST(values);
+      assignBSTCoordinates(bst.root, 0, 0, canvas.width);
+      const inorderNodes = [];
+      function inorder(node) {
+        if (!node) return;
+        inorder(node.left);
+        inorderNodes.push(node);
+        inorder(node.right);
+      }
+      inorder(bst.root);
+      // Animate highlighting each node in inorder order.
+      let idx = 0;
+      function highlightNext() {
+        if (idx >= inorderNodes.length) return;
+        const node = inorderNodes[idx];
+        // Redraw node with highlight
+        drawCircle(node.x, node.y, 20, node.value, '#8f8');
+        idx++;
+        setTimeout(highlightNext, 1000);
+      }
+      setTimeout(highlightNext, 2000);
+    }
+
+    // *******************************
+    // 5. Stack Operations
+    // *******************************
+    function visualizeStackOperations() {
+      clearCanvas();
+      // Draw an empty stack (vertical boxes)
+      const stack = [];
+      const baseX = canvas.width/2 - 50, baseY = 500;
+      // Animate push operations
+      const values = [5, 10, 15, 20];
+      let i = 0;
+      function pushNext() {
+        if (i >= values.length) {
+          // After pushing, pop one element
+          setTimeout(popOperation, 2000);
+          return;
+        }
+        stack.push(values[i]);
+        drawStack(stack, baseX, baseY);
+        i++;
+        setTimeout(pushNext, 1000);
+      }
+      function popOperation() {
+        if (stack.length === 0) return;
+        stack.pop();
+        drawStack(stack, baseX, baseY);
+        setTimeout(popOperation, 1000);
+      }
+      pushNext();
+    }
+    function drawStack(stack, x, baseY) {
+      clearCanvas();
+      ctx.font = '16px Arial';
+      ctx.textAlign = 'center';
+      for (let j = 0; j < stack.length; j++) {
+        const y = baseY - j * 50;
+        ctx.strokeStyle = '#000';
+        ctx.strokeRect(x, y - 40, 100, 40);
+        ctx.fillText(stack[j], x + 50, y - 20);
+      }
+    }
+
+    // *******************************
+    // 6. Queue Operations
+    // *******************************
+    function visualizeQueueOperations() {
+      clearCanvas();
+      // Draw a queue (horizontal boxes)
+      const queue = [];
+      const baseX = 100, y = 300;
+      const boxWidth = 80, gap = 10;
+      const values = [7, 14, 21, 28];
+      let i = 0;
+      function enqueueNext() {
+        if (i >= values.length) {
+          setTimeout(dequeueOperation, 2000);
+          return;
+        }
+        queue.push(values[i]);
+        drawQueue(queue, baseX, y, boxWidth, gap);
+        i++;
+        setTimeout(enqueueNext, 1000);
+      }
+      function dequeueOperation() {
+        if (queue.length === 0) return;
+        queue.shift();
+        drawQueue(queue, baseX, y, boxWidth, gap);
+        setTimeout(dequeueOperation, 1000);
+      }
+      enqueueNext();
+    }
+    function drawQueue(queue, startX, y, boxWidth, gap) {
+      clearCanvas();
+      ctx.font = '16px Arial';
+      ctx.textAlign = 'center';
+      for (let j = 0; j < queue.length; j++) {
+        const x = startX + j * (boxWidth + gap);
+        ctx.strokeStyle = '#000';
+        ctx.strokeRect(x, y - 40, boxWidth, 40);
+        ctx.fillText(queue[j], x + boxWidth/2, y - 20);
+      }
+    }
+
+    // *******************************
+    // 7. Min-Heap Construction
+    // *******************************
+    function visualizeMinHeap() {
+      clearCanvas();
+      // For simplicity, build a min-heap (represented as a tree)
+      const values = [15, 10, 20, 8, 12, 18, 25];
+      // We'll use the BST drawing technique (though a heap is an array-backed tree).
+      // Assume the values already satisfy the min-heap property.
+      const bst = buildBST(values); 
+      assignBSTCoordinates(bst.root, 0, 0, canvas.width);
+      drawBST(bst.root);
+      // Optionally, highlight the root as minimum.
+      setTimeout(() => {
+        drawCircle(bst.root.x, bst.root.y, 20, bst.root.value, '#ff8');
+      }, 2000);
+    }
+
+    // *******************************
+    // 8. Graph BFS Visualization
+    // *******************************
+    function visualizeGraphBFS() {
+      clearCanvas();
+      // Define a simple graph with 6 nodes and some edges.
+      const nodes = [
+        { id: 0, x: 150, y: 100 },
+        { id: 1, x: 350, y: 80 },
+        { id: 2, x: 550, y: 100 },
+        { id: 3, x: 250, y: 300 },
+        { id: 4, x: 450, y: 320 },
+        { id: 5, x: 350, y: 500 }
+      ];
+      const edges = [
+        [0,1],[1,2],[0,3],[1,3],[1,4],[3,5],[4,5]
+      ];
+      // Draw nodes
+      nodes.forEach(node => {
+        drawCircle(node.x, node.y, 20, node.id);
+      });
+      // Draw edges
+      edges.forEach(([u, v]) => {
+        const n1 = nodes[u], n2 = nodes[v];
+        drawLine(n1.x, n1.y, n2.x, n2.y);
+      });
+      // Animate BFS starting from node 0.
+      const visited = [];
+      const queue = [];
+      queue.push(0);
+      function bfsStep() {
+        if (queue.length === 0) return;
+        const current = queue.shift();
+        if (!visited.includes(current)) {
+          visited.push(current);
+          // Highlight the node
+          const node = nodes.find(n => n.id === current);
+          drawCircle(node.x, node.y, 20, node.id, '#8f8');
+          // Add neighbors
+          edges.forEach(edge => {
+            if (edge[0] === current && !visited.includes(edge[1])) {
+              queue.push(edge[1]);
+            }
+            if (edge[1] === current && !visited.includes(edge[0])) {
+              queue.push(edge[0]);
+            }
+          });
+        }
+        setTimeout(bfsStep, 1000);
+      }
+      setTimeout(bfsStep, 1000);
+    }
+
+    // *******************************
+    // 9. Trie Insertion and Search Visualization
+    // *******************************
+    function visualizeTrieInsertion() {
+      clearCanvas();
+      // For simplicity, we visualize a trie as a tree.
+      // We'll insert words: "cat", "car", "dog"
+      const words = ["cat", "car", "dog"];
+      // Precomputed simple trie structure (each node: letter, children)
+      const trie = {
+        letter: "",
+        children: [
+          { letter: "c", children: [
+              { letter: "a", children: [
+                  { letter: "t", children: [] },
+                  { letter: "r", children: [] }
+                ]}
+            ]},
+          { letter: "d", children: [
+              { letter: "o", children: [
+                  { letter: "g", children: [] }
+                ]}
+            ]}
+        ]
+      };
+      // Draw trie as a tree.
+      function drawTrie(node, depth, xMin, xMax, y) {
+        if (!node) return;
+        const x = (xMin + xMax) / 2;
+        // Draw node circle with letter (if not empty)
+        if (node.letter !== "") {
+          drawCircle(x, y, 15, node.letter);
+        }
+        // Draw children edges and nodes
+        const childCount = node.children.length;
+        node.children.forEach((child, i) => {
+          const childXMin = xMin + i * ((xMax - xMin)/childCount);
+          const childXMax = xMin + (i+1) * ((xMax - xMin)/childCount);
+          const childX = (childXMin + childXMax)/2;
+          const childY = y + 80;
+          // Draw edge
+          drawLine(x, y, childX, childY);
+          drawTrie(child, depth+1, childXMin, childXMax, childY);
+        });
+      }
+      drawTrie(trie, 0, 0, canvas.width, 50);
+    }
+
+    // *******************************
+    // 10. Hash Table Insertion Visualization
+    // *******************************
+    function visualizeHashTable() {
+      clearCanvas();
+      // We'll represent a hash table as an array of 10 buckets.
+      const bucketCount = 10;
+      const buckets = new Array(bucketCount).fill(null).map(() => []);
+      // Sample keys
+      const keys = [12, 22, 32, 42, 15, 25, 35];
+      // Simple hash function: key mod bucketCount.
+      keys.forEach(key => {
+        const idx = key % bucketCount;
+        buckets[idx].push(key);
+      });
+      // Draw buckets as boxes
+      const startX = 50, startY = 50, boxWidth = 80, boxHeight = 50, gap = 20;
+      for (let i = 0; i < bucketCount; i++) {
+        const x = startX + i * (boxWidth + gap);
+        ctx.strokeStyle = '#000';
+        ctx.strokeRect(x, startY, boxWidth, boxHeight);
+        ctx.fillStyle = '#000';
+        ctx.font = '14px Arial';
+        ctx.fillText("Bucket " + i, x + boxWidth/2, startY - 10);
+        // Draw keys in bucket (if any)
+        const keysInBucket = buckets[i];
+        keysInBucket.forEach((key, j) => {
+          ctx.fillStyle = '#8cf';
+          ctx.fillRect(x, startY + j * 20, boxWidth, 18);
+          ctx.fillStyle = '#000';
+          ctx.fillText(key, x + boxWidth/2, startY + j * 20 + 12);
+        });
+      }
+    }
+
+    // *******************************
+    // Utility Drawing Functions
+    // *******************************
+    function drawCircle(x, y, radius, text, fillColor="#8cf") {
+      ctx.fillStyle = fillColor;
+      ctx.beginPath();
+      ctx.arc(x, y, radius, 0, 2 * Math.PI);
+      ctx.fill();
+      ctx.strokeStyle = "#000";
+      ctx.stroke();
+      ctx.fillStyle = "#000";
+      ctx.font = '16px Arial';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(text, x, y);
+    }
+    function drawArrow(x1, y1, x2, y2) {
+      ctx.strokeStyle = "#000";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.stroke();
+      // Draw arrow head
+      const headlen = 10;
+      const angle = Math.atan2(y2 - y1, x2 - x1);
+      ctx.beginPath();
+      ctx.moveTo(x2, y2);
+      ctx.lineTo(x2 - headlen * Math.cos(angle - Math.PI/6), y2 - headlen * Math.sin(angle - Math.PI/6));
+      ctx.lineTo(x2 - headlen * Math.cos(angle + Math.PI/6), y2 - headlen * Math.sin(angle + Math.PI/6));
+      ctx.lineTo(x2, y2);
+      ctx.fillStyle = "#000";
+      ctx.fill();
+    }
+    function drawLine(x1, y1, x2, y2) {
+      ctx.strokeStyle = "#000";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+      ctx.stroke();
+    }
+    // Curved arrow for cycle
+    function drawCurvedArrow(x1, y1, x2, y2) {
+      ctx.strokeStyle = "#000";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      // Control point to create a curve
+      const cpX = (x1 + x2) / 2;
+      const cpY = y1 - 100;
+      ctx.moveTo(x1, y1);
+      ctx.quadraticCurveTo(cpX, cpY, x2, y2);
+      ctx.stroke();
+      // Draw arrowhead at end
+      const angle = Math.atan2(y2 - cpY, x2 - cpX);
+      const headlen = 10;
+      ctx.beginPath();
+      ctx.moveTo(x2, y2);
+      ctx.lineTo(x2 - headlen * Math.cos(angle - Math.PI/6), y2 - headlen * Math.sin(angle - Math.PI/6));
+      ctx.lineTo(x2 - headlen * Math.cos(angle + Math.PI/6), y2 - headlen * Math.sin(angle + Math.PI/6));
+      ctx.lineTo(x2, y2);
+      ctx.fillStyle = "#000";
+      ctx.fill();
+    }
+
+    // *******************************
+    // Main Visualizer: switch based on selection
+    // *******************************
+    function visualizeDS(ds) {
+      switch(ds) {
+        case "reverseLinkedList":
+          visualizeReverseLinkedList();
+          break;
+        case "detectCycleLinkedList":
+          visualizeDetectCycleLinkedList();
+          break;
+        case "bstConstruction":
+          visualizeBSTConstruction();
+          break;
+        case "inorderTraversal":
+          visualizeInorderTraversal();
+          break;
+        case "stackOperations":
+          visualizeStackOperations();
+          break;
+        case "queueOperations":
+          visualizeQueueOperations();
+          break;
+        case "minHeap":
+          visualizeMinHeap();
+          break;
+        case "graphBFS":
+          visualizeGraphBFS();
+          break;
+        case "trieInsertion":
+          visualizeTrieInsertion();
+          break;
+        case "hashTable":
+          visualizeHashTable();
+          break;
+        default:
+          clearCanvas();
+      }
+    }
+
+    // On selection change, update the visualization.
+    select.addEventListener('change', (e) => {
+      visualizeDS(e.target.value);
+    });
+
+    // Show the first visualization by default.
+    visualizeDS(select.value);
+  </script>
+</body>
+</html>
