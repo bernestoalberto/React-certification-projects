@@ -10,7 +10,7 @@ function App() {
   const [enteredNumber, setEnteredNumber] = useState(0);
   const [chosenCount, setChosenCount] = useState(0);
 
-  function handleChange(event) {
+  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     setEnteredNumber(+event.target.value);
   }
 

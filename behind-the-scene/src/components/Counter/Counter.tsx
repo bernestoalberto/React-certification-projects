@@ -6,7 +6,7 @@ import PlusIcon from '../UI/Icons/PlusIcon.tsx';
 import CounterOutput from './CounterOutput.tsx';
 import { log } from '../../log.ts';
 
-function isPrime(number) {
+function isPrime(number: number) {
   log('Calculating if is prime number', 2, 'other');
 
   if (number <= 1) {
@@ -24,7 +24,11 @@ function isPrime(number) {
   return true;
 }
 
-const Counter = memo(function Counter({ initialCount }) {
+interface CounterProps {
+  initialCount: number;
+}
+
+const Counter = memo(function Counter({ initialCount }: CounterProps) {
   log('<Counter /> rendered', 1);
 
   const initialCountIsPrime = useMemo(

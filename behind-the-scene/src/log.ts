@@ -1,4 +1,4 @@
-export function log(message, level = 0, type = 'component') {
+export function log(message: string, level = 0, type = 'component') {
   let styling =
     'padding: 0.15rem; background: #04406b; color: #fcfabd';
 

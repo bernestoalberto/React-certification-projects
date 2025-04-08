@@ -1,4 +1,4 @@
-import { log } from '../log.js';
+import { log } from '../log.ts';
 import logoImg from '../assets/logo.png';
 
 export default function Header() {
