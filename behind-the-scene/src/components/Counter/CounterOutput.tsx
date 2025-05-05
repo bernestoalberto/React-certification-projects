@@ -1,6 +1,6 @@
-import { log } from '../../log.js';
+import { log } from '../../log.ts';
 
-export default function CounterOutput({ value }: { value: number }) {
+export default function CounterOutput({ value }) {
   log('<CounterOutput /> rendered', 2);
 
   const cssClass = value >= 0 ? 'counter-output' : 'counter-output negative';

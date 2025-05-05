@@ -1,6 +1,8 @@
 import { log } from '../../log.ts';
 
-export default function IconButton({ children, icon, ...props }) {
+import { memo } from 'react';
+
+export default memo(function IconButton({ children, icon, ...props }) {
   log('<IconButton /> rendered', 2);
 
   const Icon = icon;
@@ -10,4 +12,4 @@ export default function IconButton({ children, icon, ...props }) {
       <span className="button-text">{children}</span>
     </button>
   );
-}
+});

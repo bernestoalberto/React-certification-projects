@@ -4,9 +4,10 @@ import IconButton from '../UI/IconButton.tsx';
 import MinusIcon from '../UI/Icons/MinusIcon.tsx';
 import PlusIcon from '../UI/Icons/PlusIcon.tsx';
 import CounterOutput from './CounterOutput.tsx';
-import { log } from '../../log.ts';
+import { log } from '../../log.js';
+import CounterHistory from './CounterHistory.tsx';
 
-function isPrime(number: number) {
+function isPrime(number) {
   log('Calculating if is prime number', 2, 'other');
 
   if (number <= 1) {
@@ -24,11 +25,7 @@ function isPrime(number: number) {
   return true;
 }
 
-interface CounterProps {
-  initialCount: number;
-}
-
-const Counter = memo(function Counter({ initialCount }: CounterProps) {
+const Counter = memo(function Counter({ initialCount }) {
   log('<Counter /> rendered', 1);
 
   const initialCountIsPrime = useMemo(
@@ -36,22 +33,34 @@ const Counter = memo(function Counter({ initialCount }: CounterProps) {
     [initialCount]
   );
 
+  // useEffect(() => {
+  //   setCounterChanges([{ value: initialCount, id: Math.random() * 1000 }]);
+  // }, [initialCount]);
+
   // const [counter, setCounter] = useState(initialCount);
-  const [counterChanges, setCounterChanges] = useState([initialCount]);
+  const [counterChanges, setCounterChanges] = useState([
+    { value: initialCount, id: Math.random() * 1000 },
+  ]);
 
   const currentCounter = counterChanges.reduce(
-    (prevCounter, counterChange) => prevCounter + counterChange,
+    (prevCounter, counterChange) => prevCounter + counterChange.value,
     0
   );
 
   const handleDecrement = useCallback(function handleDecrement() {
     // setCounter((prevCounter) => prevCounter - 1);
-    setCounterChanges((prevCounterChanges) => [-1, ...prevCounterChanges]);
+    setCounterChanges((prevCounterChanges) => [
+      { value: -1, id: Math.random() * 1000 },
+      ...prevCounterChanges,
+    ]);
   }, []);
 
   const handleIncrement = useCallback(function handleIncrement() {
     // setCounter((prevCounter) => prevCounter + 1);
-    setCounterChanges((prevCounterChanges) => [1, ...prevCounterChanges]);
+    setCounterChanges((prevCounterChanges) => [
+      { value: 1, id: Math.random() * 1000 },
+      ...prevCounterChanges,
+    ]);
   }, []);
 
   return (
@@ -60,7 +69,7 @@ const Counter = memo(function Counter({ initialCount }: CounterProps) {
         The initial counter value was <strong>{initialCount}</strong>. It{' '}
         <strong>is {initialCountIsPrime ? 'a' : 'not a'}</strong> prime number.
       </p>
-      <p>
+      <>
         <IconButton icon={MinusIcon} onClick={handleDecrement}>
           Decrement
         </IconButton>
@@ -68,7 +77,8 @@ const Counter = memo(function Counter({ initialCount }: CounterProps) {
         <IconButton icon={PlusIcon} onClick={handleIncrement}>
           Increment
         </IconButton>
-      </p>
+      </>
+      <CounterHistory history={counterChanges} />
     </section>
   );
 });
