@@ -1,12 +1,1 @@
-{
-  "events": [
-    {
-      "title": "A new event",
-      "image": "https://cdn.muenchen-p.de/fl_progressive,q_65/.imaging/stk/responsive/teaser300/dms/va-2016/muenchner-christkindlmarkt/christkindlmarkt-marienplat-logo-hp/document/christkindlmarkt-marienplat-logo-hp.jpg",
-      "date": "2022-10-01",
-      "description": "Some awesome event!",
-      "id": "2a42fcc4-ea21-4bdd-abf6-c40006dc66a9"
-    }
-  ],
-  "users": []
-}
+{"events":[{"title":"test","image":"https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.istockphoto.com%2Fphotos%2Fphoto-image-art&psig=AOvVaw2SOxSOaMWbhpVA-QNZ1Zgp&ust=1747253642941000&source=images&cd=vfe&opi=89978449&ved=0CBEQjRxqFwoTCPC4qZehoY0DFQAAAAAdAAAAABAE","date":"2025-05-14","description":"el evento del anyo","id":"9a219e4e-5773-4e7a-9858-fd7785d1a58d"},{"title":"A new event","image":"https://cdn.muenchen-p.de/fl_progressive,q_65/.imaging/stk/responsive/teaser300/dms/va-2016/muenchner-christkindlmarkt/christkindlmarkt-marienplat-logo-hp/document/christkindlmarkt-marienplat-logo-hp.jpg","date":"2022-10-01","description":"Some awesome event!","id":"2a42fcc4-ea21-4bdd-abf6-c40006dc66a9"}],"users":[{"email":"test@test.com","password":"$2b$12$suPTAaPYFz1Hfu/IWNCcnOaoYW/BoJQTmek.j3329KuutnkWbRaBC","id":"8cdff170-17ba-4040-aa32-42b659f16d58"},{"email":"test1@test.com","password":"$2b$12$zLvPq47/t.hGoaZ659RxLeYw9osvlDBSTmYBOs7yRlBPWIxNa.AFm","id":"29fef916-2e61-4406-bd2c-7d3da7859786"},{"email":"test3@test.com","password":"$2b$12$25lR9hY5HVEGXcM4hm54ce3J2vRb3fk37kXIP9JyMCJsbZihX7UEK","id":"65be40cb-9ce8-48e7-94fa-366080213287"},{"email":"teste3@gmail.com","password":"$2b$12$Y7BUucjTmP2Jac7peNuK5uUTA0JBLNUHfRSpAeDHeQBFuBMqjUNvW","id":"146b1d96-253b-4559-89e1-ec50538d1359"},{"email":"tester9@test.com","password":"$2b$12$FqvOfO2i8H80/aXYFKYgYeK026eR.k2Z/6vaJ30N79MIny/V1gNzm","id":"e7d9db49-dd27-4cd8-a6fc-1e89df461bab"},{"email":"tester8@tester.com","password":"$2b$12$ENXWC0Hy5QMyX2SxM0WKXe7gdWUheiBRomYZBLztaqDn2sQUV0amq","id":"d4652227-ba6c-4e5b-8a20-ef6ed83ccef7"}]}

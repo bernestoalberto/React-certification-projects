@@ -3,11 +3,11 @@ import {
   useNavigate,
   useNavigation,
   useActionData,
-  json,
   redirect
 } from 'react-router-dom';
 
 import classes from './EventForm.module.css';
+import { getAuthToken } from '../util/auth';
 
 function EventForm({ method, event }) {
   const data = useActionData();
@@ -94,17 +94,18 @@ export async function action({ request, params }) {
     description: data.get('description'),
   };
 
-  let url = 'http://localhost:8080/events';
+  let url = 'http://localhost:8000/events';
 
   if (method === 'PATCH') {
     const eventId = params.eventId;
-    url = 'http://localhost:8080/events/' + eventId;
+    url = 'http://localhost:8000/events/' + eventId;
   }
-
+  const token = getAuthToken();
   const response = await fetch(url, {
     method: method,
     headers: {
       'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + token,
     },
     body: JSON.stringify(eventData),
   });
@@ -114,7 +115,7 @@ export async function action({ request, params }) {
   }
 
   if (!response.ok) {
-    throw json({ message: 'Could not save event.' }, { status: 500 });
+    throw JSON.stringify({ message: 'Could not save event.', status: 500 });
   }
 
   return redirect('/events');
