@@ -1,0 +1,19 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "keywords": [],
+  "author": "Ernesto Bonet",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^22.15.18",
+    "body-parser": "^2.2.0",
+    "express": "^5.1.0",
+    "typescript": "^5.8.3"
+  }
+}
